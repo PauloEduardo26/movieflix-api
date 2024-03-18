@@ -5,10 +5,22 @@ const port = 3000;
 const app = express();
 const prisma = new PrismaClient();
 
-app.get("/movies", async (req, res)=>{
+app.get("/movies", async (_, res)=>{
     const movies = await prisma.movie.findMany({
-        where: { id: 4 }
-        //to select multiple elements
+        include:{
+            genres: true,
+            languages: true
+        },
+        //inclue as outras tabelas que tem relação com a movies
+        
+        orderBy:{
+            title: "asc"
+        }
+        //ordena por ordem alfabetica
+        //title: "desc" //decrescente
+
+        //where: { id: 4 }
+        //para selecionar multiplos elementos
         //where: { id: { in: [1, 4, 12] } } 
     });
     res.json(movies);
