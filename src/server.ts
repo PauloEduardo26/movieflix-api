@@ -31,6 +31,13 @@ app.post("/movies", async (req, res)=>{
     const { title, genre_id, language_id, oscar_count, release_date } = req.body;
     //variaveis = parametros que vem da requisição
     try{
+        //verifica se o filme a ser criado já existe na tabela
+        const moviWithSameTitle = await prisma.movie.findFirst({
+            where: { title: {equals: title, mode: "insensitive"} }
+            //mode: "insensitive" faz com que nao haja diferenciação entre maiusculas e minusculas
+        });
+        if(moviWithSameTitle) return res.status(409).send({message: "ja existe esse filme cadastrado"});
+
         await prisma.movie.create({
             data: { 
                 title: title, 
