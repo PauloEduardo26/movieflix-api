@@ -1,5 +1,6 @@
 import express from "express";
 import { PrismaClient } from "@prisma/client";
+import { log } from "console";
 
 const port = 3000;
 const app = express();
@@ -103,6 +104,57 @@ app.delete("/movies/:id", async (req, res) => {
     }
 
     res.status(200).send();
+});
+
+app.get("/movies/:genreName", async (req, res)=>{
+    try{
+        //receber o nome do genero pelos parametros da rota
+        const genreName = req.params.genreName;
+
+        //filtrar os filmes do banco de dados pelo genero
+        const moviesFilteredByGenre = await prisma.movie.findMany({
+            include:{
+                genres: true,
+                languages: true
+            },
+            where: {
+                genres:{
+                    name: { 
+                        equals: genreName,
+                        mode: "insensitive"
+                    }
+                }
+            }
+        });
+        res.status(200).send(moviesFilteredByGenre);
+    }catch(error){
+        return res.status(500).send({ message: "falha ao filtrar os filmes" });
+    } 
+});
+
+app.get("/movies/:language", async (req, res)=>{
+   
+    //receber o nome do genero pelos parametros da rota
+    const languageName = req.params.language;
+    console.log(languageName);
+        
+    //filtrar os filmes do banco de dados pelo genero
+    const moviesFilteredByLanguage = await prisma.movie.findMany({
+        include:{
+            genres: true,
+            languages: true
+        },
+        where: {
+            languages:{
+                name: { 
+                    equals: languageName,
+                    mode: "insensitive"
+                }
+            }
+        }
+    });
+    res.status(200).send(moviesFilteredByLanguage);
+   
 });
 
 app.listen(port, () => {
