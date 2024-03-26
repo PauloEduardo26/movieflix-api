@@ -90,6 +90,40 @@
                     }
                 }
             }
+        },
+        "/movies/{genreName}":{
+            "get":{
+                "tags": ["Movie"],
+                "summary": "filtrar filmes por genero",
+                "parameters": [
+                    {
+                        "name": "genreName",
+                        "in": "path",
+                        "required": true,
+                        "description": "Nome do genero",
+                        "schema":{
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Movie"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "falha ao filtrar filmes por genero"
+                    }
+                }
+            }
         }
     },
     "components": {
