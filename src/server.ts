@@ -199,6 +199,13 @@ app.put("/genres/:id", async (req, res)=>{
     }  
 });
 
+// app.post("/genres/", async (req, res)=>{
+//     const { name } = req.body;
+//     //pegou certo 
+// });
+
 app.listen(port, () => {
     console.log(`Servidor em execução em http://localhost:${port}`);
 });
+
+export default app;
